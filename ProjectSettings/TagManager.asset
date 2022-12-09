@@ -17,10 +17,10 @@ TagManager:
   - Backhoe
   - Bucket
   - Terrain
-  - Sand
+  - DynamicSand
   - Excavator
-  - 
-  - 
+  - StaticSand
+  - ExcavateArea
   - 
   - 
   - 
