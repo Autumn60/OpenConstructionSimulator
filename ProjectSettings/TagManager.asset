@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Terrain
   - Sand
+  - BucketArea
   layers:
   - Default
   - TransparentFX
