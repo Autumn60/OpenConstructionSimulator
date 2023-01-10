@@ -16,8 +16,6 @@ public class DeformableTerrain : MonoBehaviour
     
     [SerializeField] public Vector3 _offset;
 
-    [SerializeField] private SandManager _sandManager;
-
     [SerializeField] private TerrainData _terrainData;
 
     [SerializeField] public Vector3 _terrainSize;
@@ -36,8 +34,6 @@ public class DeformableTerrain : MonoBehaviour
 
     private void Awake()
     {
-        _sandManager = UnityEngine.Object.FindObjectOfType<SandManager>();
-
         _terrain = GetComponent<Terrain>();
         _terrainData = _terrain.terrainData;
         _terrainSize = _terrain.terrainData.size;
@@ -99,13 +95,12 @@ public class DeformableTerrain : MonoBehaviour
 
     public float GetHeight(int z, int x)
     {
-        return IsValidIndex(z, x) ? _heightmap[z, x]*_terrainSize.y : 0.0f;
+        return IsValidIndex(z, x) ? _heightmap[z, x]*_terrainSize.y + _offset.y : _offset.y;
     }
 
     public void SetHeight(Vector3 pos, float height)
     {
         if (_noDeform) return;
-
         pos -= _offset;
 
         int pos_z = (int)(pos.z * (_terrainHeightmapResolution - 1) / _terrainSize.z);
@@ -153,10 +148,11 @@ public class DeformableTerrain : MonoBehaviour
     {
         height -= _offset.y;
         float h = height / _terrainSize.y;
+        //_heightmap[z, x] = h;
         for (int i = -1; i < 2; i++)
             for (int j = -1; j < 2; j++)
                 if (IsValidIndex(z + i, x + j))
-                    _heightmap[z + i, x + j] = h;
+                   _heightmap[z + i, x + j] = h;
     }
 
     private IEnumerator UpdateTerrainCoroutine()
