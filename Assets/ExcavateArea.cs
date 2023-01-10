@@ -4,16 +4,11 @@ using UnityEngine;
 
 public class ExcavateArea : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private DeformableTerrain _terrain;
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        
+        if(!_terrain) _terrain = UnityEngine.Object.FindObjectOfType<DeformableTerrain>(); ;
     }
 
     private void OnTriggerStay(Collider other)
@@ -22,6 +17,10 @@ public class ExcavateArea : MonoBehaviour
         {
             var sand = other.GetComponent<Sand>();
             sand.Activate();
+            if (_terrain.GetHeight(other.transform.position) > other.transform.position.y - sand.minRadius) {
+                _terrain.SetHeight(other.transform.position, other.transform.position.y - sand.minRadius);
+                _terrain.OnHeightmapChanged();
+            }
         }
     }
 }

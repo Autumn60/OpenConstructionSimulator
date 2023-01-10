@@ -5,6 +5,7 @@ using UnityEngine;
 public class Sand : MonoBehaviour
 {
     [SerializeField] private float _minRadius = 0.0f;
+    public float minRadius { get => this._minRadius; }
     [SerializeField] private float _maxRadius = 1.0f;
     [SerializeField] private float _ballooningTime = 1.0f;
 
@@ -16,6 +17,10 @@ public class Sand : MonoBehaviour
     private Rigidbody _rb;
 
     private float _activateTime;
+
+    private bool _onTerrain;
+
+    public DeformableTerrain terrain;
 
     public bool isUsed { get => this.gameObject.activeSelf; }
     public bool isActive { get => !this._rb.isKinematic; }
@@ -42,10 +47,19 @@ public class Sand : MonoBehaviour
     private void Update()
     {
         if (_rb.isKinematic) return;
-        if (Time.time > _activateTime + _ballooningTime) return;
-        float t = Mathf.Clamp01((Time.time - _activateTime)/ _ballooningTime);
-        float scale = (1 - t) * _minRadius + t * _maxRadius;
-        _transform.localScale = new Vector3(scale, scale, scale);
+        if (Time.time <= _activateTime + _ballooningTime)
+        {
+            float t = Mathf.Clamp01((Time.time - _activateTime) / _ballooningTime);
+            float scale = (1 - t) * _minRadius + t * _maxRadius;
+            _transform.localScale = new Vector3(scale, scale, scale);
+        }
+
+        if(_onTerrain && _rb.IsSleeping())
+        {
+            //terrain.SetHeight(_transform.position, _transform.position.y + _maxRadius);
+            //terrain.OnHeightmapChanged();
+            this.gameObject.SetActive(false);
+        }
     }
 
     public void Activate()
@@ -70,5 +84,21 @@ public class Sand : MonoBehaviour
         pos.z = z;
         _transform.position = pos;
         _transform.rotation = Quaternion.identity;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag == "Terrain")
+        {
+            _onTerrain = true;
+        }        
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.tag == "Terrain")
+        {
+            _onTerrain = false;
+        }
     }
 }
