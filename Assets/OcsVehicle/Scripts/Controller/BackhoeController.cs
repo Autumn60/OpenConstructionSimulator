@@ -45,35 +45,41 @@ namespace Ocs.Vehicle.Controller
         {
             // Callback
             this._input.Crawler.LeftReverse.started += context =>{
-                if(_vehicle.ownership){
+                if(_vehicle.ownership || _debug_forceManualMode)
+                {
                     this._vehicle.LeftReverse = !this._vehicle.LeftReverse;
                 }
             };
             this._input.Crawler.RightReverse.started += context =>{
-                if(_vehicle.ownership){
+                if(_vehicle.ownership || _debug_forceManualMode)
+                {
                     this._vehicle.RightReverse = !this._vehicle.RightReverse;
                 }
             };
             //this._input.Car.ShiftDown.started += context => this._vehicle.ReverseGear = true;
             this._input.Equipment.Light.started += context =>{
-                if(_vehicle.ownership){
+                if(_vehicle.ownership || _debug_forceManualMode)
+                {
                     this._vehicle.SwitchLight();
                 }
                 
             };
             this._input.Equipment.Hone.started += context =>{
-                if(_vehicle.ownership){
+                if(_vehicle.ownership || _debug_forceManualMode)
+                {
                     this._vehicle.PlayHone();
                 }
                 
             };
             this._input.Equipment.LeftWinker.started += context =>{
-                if(_vehicle.ownership){
+                if(_vehicle.ownership || _debug_forceManualMode)
+                {
                     this._vehicle.SwitchLeftWinker();
                 }
             };
             this._input.Equipment.RightWinker.started += context =>{
-                if(_vehicle.ownership){
+                if(_vehicle.ownership || _debug_forceManualMode)
+                {
                     this._vehicle.SwitchRightWinker();
                 }
             };
